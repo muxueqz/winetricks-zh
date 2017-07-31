@@ -10,7 +10,7 @@ w_metadata line apps\
 
 load_line()
 {
-w_download http://cdn.line-apps.com/client/win/LineInst.exe 215f5f1551b76c1a86e1da62406bd868f281d81e
+w_download http://cdn.line-apps.com/client/win/LineInst.exe 63c19defb5b6f5bc0c81fa5d115db54401204a986e624d8f5470c03c1369f82a
 cd "$W_CACHE/$W_PACKAGE"
 
     # Make sure chinese fonts are available

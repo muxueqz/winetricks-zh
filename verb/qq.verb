@@ -1,9 +1,9 @@
 w_metadata qq apps \
- title="QQ 7.6 (Chinese chat app)" \
+ title="QQ 8.9.1(Chinese chat app)" \
  publisher="Tencent" \
- year="2015" \
+ year="2017" \
  media="download" \
- file1="QQ7.6.exe" \
+ file1="QQ8.9.1.exe" \
  file2="QQ.tar.gz"\
  installed_exe1="$W_PROGRAMS_X86_WIN/Tencent/QQ/Bin/QQScLauncher.exe" \
  homepage="http://www.qq.com" \
@@ -11,17 +11,12 @@ w_metadata qq apps \
 
 load_qq()
 {
-    w_download http://dldir1.qq.com/qqfile/qq/QQ7.6/15742/QQ7.6.exe 51a8c392951b6bb04196bd5403332a8ea49dc5f6
-    w_download http://hillwoodhome.net/wine/QQ.tar.gz 08de45d3e5bb34b22e7c33e1163daec69742db58
+    w_download http://dldir1.qq.com/qqfile/qq/QQ8.9.3/21169/QQ8.9.3.exe 5932ce06f44cdf141c1ac1ff732ba8cb95fd6283e0a414b1b25a6bb031f3e1de
+    w_download http://hillwoodhome.net/wine/QQ.tar.gz eb5cd6371eb75ec9e2fc0271199df05cbb9f38a60c2e81d5d8ac7daeb40aba62
 
-    if w_workaround_wine_bug 29636 "Installing native riched20 to work around crash bug"
+    if w_workaround_wine_bug 5162 "Installing native riched20 to work around can't input username."
     then
         w_call riched20
-    fi
-
-    if w_workaround_wine_bug 34566 "Installing native ctf to work around crash"
-    then
-        w_call msctf
     fi
 
     # Make sure chinese fonts are available
@@ -32,31 +27,28 @@ load_qq()
 
     if w_workaround_wine_bug 38171 "Installing desktop file to work around bug"
     then
-        cd "$W_TMP/"
+        w_try_cd "$W_TMP/"
         tar -zxf "$W_CACHE/qq/QQ.tar.gz"
-        mkdir -p $HOME/.local/share/applications/wine/Programs/腾讯软件/QQ
-        mkdir -p $HOME/.local/share/icons/hicolor/48x48/apps
-        mkdir -p $HOME/.local/share/icons/hicolor/256x256/apps
+        mkdir -p "$HOME/.local/share/applications/wine/Programs/腾讯软件/QQ"
+        mkdir -p "$HOME/.local/share/icons/hicolor/48x48/apps"
+        mkdir -p "$HOME/.local/share/icons/hicolor/256x256/apps"
         w_try mv QQ/腾讯QQ.desktop ~/.local/share/applications/wine/Programs/腾讯软件/QQ
         w_try mv QQ/48x48/QQ.png ~/.local/share/icons/hicolor/48x48/apps
         w_try mv QQ/256x256/QQ.png ~/.local/share/icons/hicolor/256x256/apps
-        echo Exec=env WINEPREFIX=$WINEPREFIX $WINE \"$W_PROGRAMS_X86_WIN\\Tencent\\QQ\\bin\\QQScLauncher.exe\">> $HOME/.local/share/applications/wine/Programs/腾讯软件/QQ/腾讯QQ.desktop
+        # shellcheck disable=SC1001
+        echo Exec=env WINEPREFIX="$WINEPREFIX" "$WINE" '"'$W_PROGRAMS_X86_WIN'/Tencent/QQ/bin/QQScLauncher.exe"' >> "$HOME/.local/share/applications/wine/Programs/腾讯软件/QQ/腾讯QQ.desktop"
     fi
 
-    if w_workaround_wine_bug 39384 "Set permission as 000 for QQFrmMgr.sys to work around can't be started bug"
+    if w_workaround_wine_bug 39657 "Disable ntoskrnl.exe to work around can't be started bug"
     then
-        cd $WINEPREFIX/drive_c/windows/system32/drivers/
-        touch QQFrmMgr.sys
-        chmod 000 QQFrmMgr.sys
+        w_override_dlls disabled ntoskrnl.exe
     fi
 
-    cd "$W_CACHE/$W_PACKAGE"
+    if w_workaround_wine_bug 37680 "Disable txplatform.exe to work around QQ can't be quit cleanly"
+    then
+        w_override_dlls disabled txplatform.exe
+    fi
+
+    w_try_cd "$W_CACHE/$W_PACKAGE"
     w_try "$WINE" "$file1"
-    
-    # fix issues#10, fix crash after login
-#    mkdir -p $WINEPREFIX/drive_c/users/$LOGNAME/Application\ Data/Tencent/QQ/Misc/com.tencent.wireless/SDK
-#    chmod 000 $WINEPREFIX/drive_c/users/$LOGNAME/Application\ Data/Tencent/QQ/Misc/com.tencent.wireless/SDK
-
-    w_declare_exe "$W_PROGRAMS_X86_WIN\\Tencent\\QQ\\Bin" QQScLauncher.exe
 }
-

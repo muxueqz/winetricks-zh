@@ -1,4 +1,74 @@
 -------------------------------------------
+Tue Jun 27 2017 - hillwood@opensuse.org
+
+- Fix issues#94 and issues#94.
+
+-------------------------------------------
+Wed Mar 29 2017 - hillwood@opensuse.org
+
+- Merge update form upstream
+- Fix issues#83, make sure sending files works for WeChat.
+
+-------------------------------------------
+Thu Mar 23 2017 - hillwood@opensuse.org
+
+- Add support for TIM.
+- Merge changes form upsteam version 20170316.
+
+-------------------------------------------
+Mon Apr 11 2016 - hillwood@opensuse.org
+
+- Add support for AliWangWang（阿里旺旺）.
+
+-------------------------------------------
+Tue Mar 22 2016 - hillwood@opensuse.org
+
+- Merge changs from upstream.
+
+-------------------------------------------
+Tue Mar 15 2016 - hillwood@opensuse.org
+
+- Update QQ to 8.1
+
+-------------------------------------------
+Mon Jan  4 2016 - hillwood@opensuse.org
+
+- Add support for youkuclient, iQIYI and youdaonote.
+
+-------------------------------------------
+Fri Jan  1 2016 - hillwood@opensuse.org
+
+- Update QQ to 8.0.
+
+-------------------------------------------
+Mon Dec 28 2015 - hillwood@opensuse.org
+
+- Add QQMusic support.
+
+-------------------------------------------
+Fri Dec 25 2015 - hillwood@opensuse.org
+
+- Merge changs from upstream.
+- Fix QQ can't be quit cleanly.
+- Update README.md.
+- Set WINETRICKS_OPT_SHAREDPREFIX=0 as default.
+
+-------------------------------------------
+Thu Dec 24 2015 - hillwood@opensuse.org
+
+- Update QQ to 7.9, fix work on wine 1.7.51 and above.
+
+-------------------------------------------
+Sun Dec 20 2015 - hillwood@opensuse.org
+
+- Fix issues#25
+
+-------------------------------------------
+Sun Dec 15 2015 - hillwood@opensuse.org
+
+- Update 163music. Thanks to abcfy2.
+
+-------------------------------------------
 Sun Oct  4 2015 - hillwood@opensuse.org
 
 - Update QQ to 7.6, update QQlight to 7.5

@@ -3,26 +3,26 @@ w_metadata qqlight apps \
  publisher="Tencent" \
  year="2015" \
  media="download" \
- file1="QQ7.7Light.exe" \
+ file1="QQ7.9Light.exe" \
  file2="QQLight.tar.gz"\
- installed_exe1="$W_PROGRAMS_X86_WIN/Tencent/QQ/Bin/QQScLauncher.exe" \
+ installed_exe1="$W_PROGRAMS_X86_WIN/Tencent/QQLite/Bin/QQScLauncher.exe" \
  homepage="http://www.qq.com" \
  unattended="no"
 
 load_qqlight()
 {
-    w_download http://dldir1.qq.com/qqfile/qq/QQ7.7Light/14298/QQ7.7Light.exe 735d0006dc47513bd62c07d4d28d487880972fff
-    w_download http://hillwoodhome.net/wine/QQLight.tar.gz db04deb656c0cce7b223cc3358a8af98b0deed52
+    w_download http://dldir1.qq.com/qqfile/qq/QQ7.9Light/14308/QQ7.9Light.exe 4758cea5cc140d018f487865983e4b13c71c96c8f864f250db3ff0a956681489
+    w_download http://hillwoodhome.net/wine/QQLight.tar.gz e6ee5c5dbe524c96d2b96eed343160423b023d38cf2d4dcbc2baea660eae5374
 
     if w_workaround_wine_bug 29636 "Installing native riched20 to work around crash bug"
     then
         w_call riched20
     fi
 
-    if w_workaround_wine_bug 34566 "Installing native ctf to work around crash"
-    then
-        w_call msctf
-    fi
+#    if w_workaround_wine_bug 34566 "Installing native ctf to work around crash"
+#    then
+#        w_call msctf
+#    fi
 
     # Make sure chinese fonts are available
     w_call fakechinese
@@ -40,17 +40,20 @@ load_qqlight()
         w_try mv QQLight/QQ轻聊版.desktop $HOME/.local/share/applications/wine/Programs/腾讯软件/QQ轻聊版
         w_try mv QQLight/48x48/QQLight.png $HOME/.local/share/icons/hicolor/48x48/apps
         w_try mv QQLight/256x256/QQLight.png $HOME/.local/share/icons/hicolor/256x256/apps
-        echo Exec=env WINEPREFIX=$WINEPREFIX $WINE \"$W_PROGRAMS_X86_WIN\\\\Tencent\\\\QQLite\\\\bin\\\\QQScLauncher.exe\" >> $HOME/.local/share/applications/wine/Programs/腾讯软件/QQ轻聊版/QQ轻聊版.desktop
+        echo Exec=env WINEPREFIX=$WINEPREFIX $WINE '"'$W_PROGRAMS_X86_WIN'\Tencent\QQLite\Bin\QQScLauncher.exe"'>> $HOME/.local/share/applications/wine/Programs/腾讯软件/QQ轻聊版/QQ轻聊版.desktop
     fi
 
-    if w_workaround_wine_bug 39384 "Set permission as 000 for QQFrmMgr.sys to work around can't be started bug"
+    if w_workaround_wine_bug 39384 "Disable ntoskrnl.exe to work around can't be started bug"
     then
-        cd $WINEPREFIX/drive_c/windows/system32/drivers/
-        touch QQFrmMgr.sys
-        chmod 000 QQFrmMgr.sys
+        w_override_dlls disabled ntoskrnl.exe
     fi
-
+    
+    if w_workaround_wine_bug 37680 "Disable txplatform.exe to fix QQ can't be quit cleanly"
+    then
+        w_override_dlls disabled txplatform.exe
+    fi   
+  
     cd "$W_CACHE/$W_PACKAGE"
     w_try "$WINE" "$file1"
-    w_declare_exe "$W_PROGRAMS_X86_WIN\\Tencent\\QQ\\Bin" QQScLauncher.exe
+    w_declare_exe "$W_PROGRAMS_X86_WIN\\Tencent\\QQLite\\Bin" QQScLauncher.exe
 }

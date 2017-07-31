@@ -10,7 +10,7 @@ w_metadata TM2013P2 apps\
 
 load_TM2013P2()
 {
-w_download http://dldir1.qq.com/qqfile/qq/tm/2013Preview2/10913/TM2013Preview2.exe 88f26ff2a5852f5332f46e5e1e440d198db69803
+w_download http://dldir1.qq.com/qqfile/qq/tm/2013Preview2/10913/TM2013Preview2.exe 43f021773e7b7346cc51849f904f9ddd0eaf44bf0be337c5e0fad7d12cc949e1
 cd "$W_CACHE/$W_PACKAGE"
     if w_workaround_wine_bug 29636 "Installing native riched20 to work around crash bug"
     then
@@ -20,6 +20,16 @@ cd "$W_CACHE/$W_PACKAGE"
     if w_workaround_wine_bug 34566 "Installing native ctf to work around crash"
     then
         w_call msctf
+    fi
+    
+    if w_workaround_wine_bug 37680 "Disable txplatform.exe to fix QQ can't be quit cleanly"
+    then
+        w_override_dlls disabled txplatform.exe
+    fi
+
+    if w_workaround_wine_bug 42810 "Setting Windows version as XP to work around launch native browser bug"
+    then
+        w_call winxp
     fi
 
     # Make sure chinese fonts are available
